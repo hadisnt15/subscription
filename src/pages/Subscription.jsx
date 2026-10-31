@@ -27,7 +27,7 @@ export default function Subscription() {
 
             setSubscription(data);
         } catch (error) {
-            setError(error.response?.data?.message || 'Gagal mengambil data subscription.');
+            setError(error.response?.data?.message || 'Failed to Collect Subscriptions.');
         } finally {
             setLoading(false);
         }
@@ -176,8 +176,14 @@ export default function Subscription() {
                                         </div>
                                     )}
                                     {item.status === 'rejected' && (
-                                        <div className="mt-5 rounded-lg bg-red-50 p-4 text-sm text-red-700">
-                                            Payment rejected. Please check reject reason and make a new order.
+                                        <div className="mt-5 rounded-lg border border-red-200 bg-red-50 p-4">
+                                            <p className="font-semibold text-red-700">Payment Rejected</p>
+                                            <p className="mt-1 text-sm text-red-600">Payment rejected. Please check the reason below and make a new order.</p>
+                                            {(item.payments?.[0]?.note || item.payment?.note) && (
+                                                <div className="mt-3 rounded-lg bg-white p-3">
+                                                    <p className="mt-1 whitespace-pre-line text-sm text-gray-700">{item.payments?.[0]?.note || item.payment?.note}</p>
+                                                </div>
+                                            )}
                                         </div>
                                     )}
                                 </div>
