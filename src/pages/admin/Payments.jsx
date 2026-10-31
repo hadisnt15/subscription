@@ -56,7 +56,7 @@ export default function Payments() {
         } catch (error) {
             console.error('Fetch payments error:', error.response?.data || error);
 
-            setError(error.response?.data?.message || 'Gagal mengambil data pembayaran.');
+            setError(error.response?.data?.message || 'Failed to Collect Payment Data.');
         } finally {
             setLoading(false);
         }
@@ -74,27 +74,30 @@ export default function Payments() {
     function formatDate(date) {
         if (!date) return '-';
 
-        return new Date(date).toLocaleString('id-ID', {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-        });
+        const value = String(date);
+        const match = value.match(
+            /^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})/
+        );
+
+        if (!match) return '-';
+
+        const [, year, month, day, hour, minute] = match;
+
+        return `${day}-${month}-${year} ${hour}.${minute}`;
     }
 
     function getStatus(status) {
         const statuses = {
             waiting_for_verification: {
-                label: 'Menunggu Verifikasi',
+                label: 'Waiting for Verification',
                 color: 'bg-yellow-100 text-yellow-700',
             },
             approved: {
-                label: 'Disetujui',
+                label: 'Approved',
                 color: 'bg-green-100 text-green-700',
             },
             rejected: {
-                label: 'Ditolak',
+                label: 'Rejected',
                 color: 'bg-red-100 text-red-700',
             },
         };
@@ -126,7 +129,7 @@ export default function Payments() {
             setProofUrl(url);
             setProofType(contentType);
         } catch (error) {
-            setError('Gagal memuat bukti pembayaran.');
+            setError('Failed to Load Payment Proof.');
         } finally {
             setProofLoading(false);
         }
@@ -152,7 +155,7 @@ export default function Payments() {
         if (!selectedPayment) return;
 
         if (decision === 'reject' && !note.trim()) {
-            setError('Catatan penolakan wajib diisi.');
+            setError('Reject Reason Must Be Filled.');
             return;
         }
 
@@ -165,14 +168,14 @@ export default function Payments() {
 
             await api.post(endpoint, payload);
 
-            setSuccess(decision === 'approve' ? 'Pembayaran berhasil disetujui.' : 'Pembayaran berhasil ditolak.');
+            setSuccess(decision === 'approve' ? 'Payment Approved.' : 'Payment Rejected.');
             setSelectedPayment(null);
             setDecision('');
             setNote('');
 
             await fetchPayments();
         } catch (error) {
-            setError(error.response?.data?.message || 'Gagal memproses pembayaran.');
+            setError(error.response?.data?.message || 'Failed to Process Payment.');
         } finally {
             setProcessing(false);
         }

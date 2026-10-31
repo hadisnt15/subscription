@@ -37,7 +37,7 @@ export default function Packages() {
 
             setPackages(Array.isArray(data) ? data : []);
         } catch (error) {
-            setError(error.response?.data?.message || 'Gagal mengambil daftar paket.');
+            setError(error.response?.data?.message || 'Failed to Collect Packages.');
         } finally {
             setLoading(false);
         }
@@ -108,11 +108,11 @@ export default function Packages() {
             if (editingPackage) {
                 await api.put(`/admin/packages/${editingPackage.id}`, payload);
 
-                setSuccess('Paket berhasil diperbarui.');
+                setSuccess('Package Updated.');
             } else {
                 await api.post('/admin/packages', payload);
 
-                setSuccess('Paket berhasil ditambahkan.');
+                setSuccess('Package Created.');
             }
 
             closeModal();
@@ -123,7 +123,7 @@ export default function Packages() {
             if (validationErrors) {
                 setError(Object.values(validationErrors).flat().join(' '));
             } else {
-                setError(error.response?.data?.message || 'Gagal menyimpan paket.');
+                setError(error.response?.data?.message || 'Failed to Create Package.');
             }
         } finally {
             setSaving(false);
@@ -131,9 +131,9 @@ export default function Packages() {
     }
 
     async function toggleStatus(item) {
-        const action = item.is_active ? 'menonaktifkan' : 'mengaktifkan';
+        const action = item.is_active ? 'inactivate' : 'activate';
 
-        if (!window.confirm(`Yakin ingin ${action} paket "${item.name}"?`)) {
+        if (!window.confirm(`Are you sure to ${action} "${item.name} package"?`)) {
             return;
         }
 
@@ -142,10 +142,10 @@ export default function Packages() {
             setSuccess('');
 
             await api.patch(`/admin/packages/${item.id}/toggle-status`);
-            setSuccess(`Status paket "${item.name}" berhasil diperbarui.`);
+            setSuccess(`Package "${item.name}" Status Updated.`);
             await fetchPackages();
         } catch (error) {
-            setError(error.response?.data?.message || 'Gagal mengubah status paket.');
+            setError(error.response?.data?.message || 'Failed to Update Package Status.');
         }
     }
 
