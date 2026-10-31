@@ -1,0 +1,40 @@
+# Laravel
+/vendor
+.env
+.env.*
+!.env.example
+/auth.json
+/storage/*.key
+/storage/pail
+/bootstrap/cache/*.php
+
+# React / Vite
+/node_modules
+/public/build
+/public/hot
+
+# Logs
+*.log
+/storage/logs/*
+
+# IDE
+/.idea
+/.vscode
+/.cursor/
+/.zed
+/.nova
+/.phpactor.json
+/.codex
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.phpunit.result.cache
+/.phpunit.cache
+
+# Others
+_ide_helper.php
+Homestead.json
+Homestead.yaml
